@@ -13,7 +13,9 @@ RUN npm run build:styles
 
 FROM ruby:3.3.4-bookworm AS gems
 WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      build-essential \
+      libbrotli-dev \
   && rm -rf /var/lib/apt/lists/*
 COPY Gemfile Gemfile.lock ./
 ENV BUNDLE_WITHOUT="development:test" \
@@ -23,7 +25,10 @@ RUN bundle install --jobs 4
 
 FROM ruby:3.3.4-slim-bookworm
 WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends libyaml-0-2 \
+# libbrotli1 is required at runtime by the brotli native gem (rack-brotli).
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      libyaml-0-2 \
+      libbrotli1 \
   && rm -rf /var/lib/apt/lists/*
 
 ENV RAILS_ENV=production \

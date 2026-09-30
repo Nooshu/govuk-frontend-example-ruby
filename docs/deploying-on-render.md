@@ -14,6 +14,8 @@ Authoritative Render docs: [Docker](https://render.com/docs/docker), [Blueprints
 
 Build artefacts kept at runtime: gems, `node_modules/govuk-frontend`, `dist/stylesheets/application.css`, Rails app.
 
+The runtime image installs `libbrotli1` so the `rack-brotli` / `brotli` native extension can load (Brotli-first compression from the baseline).
+
 ## Prerequisites
 
 1. A GitHub account with this repo (or a fork) pushed to `main`.
