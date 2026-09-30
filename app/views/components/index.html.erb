@@ -1,0 +1,15 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= @layout[:heading] %></h1>
+    <p class="govuk-body">Every GOV.UK Frontend component in version <%= @layout[:frontend_version] %>. This is the preview homepage: each link opens that component’s own page. Markup is rendered by this service’s Ruby component library, not by Nunjucks at request time.</p>
+    <p class="govuk-body">This page lists links only — each component page shows versions (fixtures) and a live preview.</p>
+    <ul class="govuk-list">
+      <% @components.each do |component| %>
+        <li>
+          <a class="govuk-link" href="/components/<%= component.name %>"><%= component.title %></a>
+          <p class="govuk-body"><%= component.description %></p>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

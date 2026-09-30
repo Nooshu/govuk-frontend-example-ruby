@@ -1,0 +1,290 @@
+---
+description: Build a GOV.UK Frontend compatible server-rendered implementation using Ruby, Rails, ERB, and ViewComponent
+alwaysApply: true
+---
+
+# Project goal
+
+Build a server-rendered UK government service using Ruby on Rails that produces HTML compatible with GOV.UK Frontend.
+
+This demonstrates that GOV.UK Frontend does not require Nunjucks, Node.js, or a client-side frontend framework.
+
+Official GOV.UK Frontend fixtures for the installed version are the rendering contract.
+
+Target 100% fixture parity for every implemented component.
+
+## Technology
+
+Use:
+
+- current supported Ruby
+- current supported Rails
+- ERB
+- ViewComponent
+- RSpec
+- Nokogiri
+- RuboCop
+- Bundler
+
+Study `alphagov/govuk_publishing_components` for established GOV.UK Rails approaches.
+
+Do not make this implementation dependent on it unless explicitly required.
+
+Do not copy it blindly.
+
+## GOV.UK Frontend
+
+Pin an explicit GOV.UK Frontend version.
+
+Use official GOV.UK Frontend CSS, JavaScript, fonts, and assets.
+
+The same version supplies the fixtures against which compatibility is tested.
+
+## Component investigation
+
+Before implementing each component:
+
+1. inspect all upstream fixtures
+2. inspect expected HTML
+3. inspect upstream Nunjucks where necessary
+4. understand rendering behaviour
+5. design the Rails API
+6. implement it
+7. run all applicable fixtures
+
+Nunjucks is behavioural reference material, not a runtime dependency.
+
+## Component architecture
+
+Prefer ViewComponent for reusable GOV.UK components.
+
+Example:
+
+```ruby
+render Govuk::ButtonComponent.new(
+  text: "Continue",
+  type: "submit"
+)
+```
+
+Suggested structure:
+
+```text
+app/
+  components/
+    govuk/
+      button_component.rb
+      button_component.html.erb
+      input_component.rb
+      input_component.html.erb
+      radios_component.rb
+      radios_component.html.erb
+
+spec/
+  components/
+  fixtures/
+  rendering/
+```
+
+Use explicit constructor arguments.
+
+Avoid generic option hashes where a clearer component API is practical.
+
+Do not over-engineer type emulation in Ruby.
+
+Keep controllers, business logic, components, fixture mapping, and comparison separate.
+
+Components must be independently testable.
+
+## ERB
+
+Use ERB for server-side HTML rendering.
+
+Do not use Nunjucks.
+
+Do not invoke Node.js to render production component HTML.
+
+Do not introduce unnecessary wrapper markup.
+
+Keep rendering templates simple.
+
+Move complex decisions into component classes where appropriate.
+
+## Escaping and security
+
+Use Rails HTML escaping by default.
+
+GOV.UK `text` options must be escaped.
+
+GOV.UK `html` options require explicit trusted HTML handling.
+
+Do not casually use `html_safe`.
+
+Never call `html_safe` on arbitrary user-controlled strings.
+
+Do not disable escaping to make fixture tests pass.
+
+## Attributes
+
+Support arbitrary attributes where GOV.UK Frontend supports them.
+
+Use Rails helpers or safe rendering mechanisms rather than raw string concatenation.
+
+Correctly preserve:
+
+- IDs
+- names
+- values
+- classes
+- ARIA
+- data attributes
+- roles
+- boolean attributes
+- form states
+
+## Fixture tests
+
+Use the official fixtures belonging to the pinned GOV.UK Frontend version.
+
+For every fixture:
+
+1. load fixture data
+2. map options into the component / `Govuk.render`
+3. render through the same path as production and preview pages
+4. obtain expected GOV.UK HTML from fixture `html`
+5. compare with **ordinal string equality** (`rendered == fixture.html`)
+6. on failure, show the first differing line (Nokogiri may help debug; it must not decide pass/fail)
+
+Tests must be data-driven.
+
+A new upstream fixture should normally execute automatically.
+
+Include hidden fixtures — Design System visibility is not the contract.
+
+## HTML comparison
+
+Primary gate: **byte-for-byte / ordinal string equality** against official fixture `html`.
+
+Never normalise HTML to make tests pass.
+
+Never edit fixture `html`.
+
+When a test fails, assume rendering is wrong before modifying the comparator.
+
+Nokogiri is allowed only as a diagnostic aid for humans, not as a weakened equality check.
+
+## Testing
+
+Use RSpec.
+
+Cover:
+
+- all supported fixtures
+- text escaping
+- trusted HTML
+- classes
+- attributes
+- IDs
+- ARIA
+- errors
+- hints
+- nested content
+- checked/selected states
+- complex components
+
+## Forbidden shortcuts
+
+Never:
+
+- modify upstream fixtures
+- modify expected HTML
+- special-case fixture names
+- hard-code fixture HTML
+- copy expected fixture HTML into components
+- weaken comparison to hide differences
+- invoke Nunjucks at runtime
+- invoke Node.js to generate production HTML
+- call another reference implementation at runtime
+- use React, Vue, Angular, Svelte, or another SPA framework for core rendering
+- replace official GOV.UK Frontend CSS
+- unnecessarily reimplement GOV.UK JavaScript
+
+## Progressive enhancement
+
+Server-render the core journey.
+
+Use official GOV.UK Frontend JavaScript to progressively enhance the resulting markup.
+
+JavaScript must not repair incorrectly generated Rails markup.
+
+## Dependencies
+
+Use Bundler.
+
+Pin dependencies appropriately and commit the lockfile.
+
+Keep dependencies minimal and established.
+
+Use dependency/security checking where appropriate.
+
+## Quality
+
+Use RuboCop.
+
+Follow Rails conventions.
+
+Prefer:
+
+- small components
+- explicit arguments
+- simple ERB
+- composition
+- clear Rails conventions
+
+Avoid:
+
+- excessive Rails magic that hides rendering behaviour
+- HTML string concatenation
+- widespread `html_safe`
+- unnecessary JavaScript
+- architecture copied directly from TypeScript
+
+## CI
+
+CI must:
+
+1. install locked dependencies
+2. run RuboCop
+3. run RSpec
+4. run the complete fixture parity suite
+
+Fixture failures fail CI.
+
+## GOV.UK Frontend upgrades
+
+When upgrading:
+
+1. update GOV.UK Frontend
+2. update fixtures to the same version
+3. run the existing implementation against them
+4. investigate failures
+5. update Rails components where upstream behaviour changed
+6. rerun the complete suite
+
+Do not modify new fixtures to preserve old rendering.
+
+## Definition of done
+
+A component is complete when:
+
+- Rails server-renders it
+- no Nunjucks runtime dependency exists
+- no Node.js runtime rendering exists
+- official GOV.UK Frontend assets are used
+- every supported fixture passes
+- security behaviour is tested
+- accessibility markup matches
+- no fixture hacks exist
+- CI passes
+
+Fixture parity is the compatibility measure.

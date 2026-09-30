@@ -7,3 +7,14 @@ package-lock.json
 *.min.js
 *.min.css
 CHANGELOG.md
+
+public/
+coverage/
+tmp/
+log/
+vendor/
+app/
+config/
+lib/
+spec/
+Gemfile.lock

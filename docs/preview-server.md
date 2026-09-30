@@ -1,21 +1,41 @@
 # Preview server
 
-Local server for human parity checks and pattern demos.
+Local server for human parity checks, the fishing-licence journey, and component demos.
 
-## Status
+## Commands
 
-**Commands TBD** until [tech-stack.md](tech-stack.md) is filled in. Document the idiomatic way to start the preview app for the chosen language there (task runner, CLI, IDE run config — whatever best practice for that stack is).
+```sh
+npm ci
+bundle install
+npm start    # builds Sass, then `bundle exec rails server` — http://127.0.0.1:3000
+```
+
+Stack details: [tech-stack.md](tech-stack.md). Example journey: [example-service.md](example-service.md).
+
+## Surfaces
+
+| Path                                 | Purpose                                                                             |
+| ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `/`                                  | Start page (links to catalogue under Developer previews)                            |
+| `/components`                        | Catalogue index — **links only**, no live demos                                     |
+| `/components/:name?fixture=`         | Preview selected fixture + **live** parity banner (`Govuk.render` ≡ fixture `html`) |
+| `/components/:name/fixture?fixture=` | Raw official fixture HTML fragment                                                  |
+| `/health`                            | Liveness                                                                            |
+
+`DEMOS_ENABLED` gates the catalogue (on in development/test; set `true` on Render).
 
 ## Expectations
 
-- Homepage lists components (and patterns) as **links only** — no embedded live demos.
-- A preview surface per component renders **only the selected** fixture, with a parity banner vs official `html`.
-- A raw-fixture surface returns an HTML **fragment** for automation.
-- Preview and fixture surfaces are Development / Testing only.
-- Preview responses use the same [`baseline/`](../baseline/) headers as production. On local HTTP, pass `secureTransport: false` so HSTS is not sent.
-- Syntax highlighting (if any) loads on Previews only — never on the global layout.
-- Optional health / readiness endpoints follow the stack’s normal conventions; missing optional infra should not block Frontend-only preview.
+- Parity banner says “HTML matches the fixture” only when ordinal equality holds.
+- Preview uses the same renderer and ordered fixture options as the RSpec suite.
+- Responses use [`baseline/`](../baseline/) headers; local HTTP omits HSTS.
+- Triple noindex: meta robots, `X-Robots-Tag`, `/robots.txt` Disallow.
 
 ## After code changes
 
-Rebuild or reload as required by the language’s tooling; hard-refresh the browser. Confirm focus states, header/footer, and a failing-form example during visual QA after Frontend upgrades ([upgrading-govuk-frontend.md](upgrading-govuk-frontend.md)).
+```sh
+npm run build:styles
+bundle exec rspec
+```
+
+Hard-refresh the browser. After Frontend upgrades, re-check focus, header/footer, and a failing-form example ([upgrading-govuk-frontend.md](upgrading-govuk-frontend.md)).

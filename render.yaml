@@ -1,0 +1,28 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Step-by-step: docs/deploying-on-render.md
+#
+# Rails needs Node for Sass / govuk-frontend at build time, so we use Docker.
+# Sessions are cookie-based (fine for a public example; not multi-instance durable).
+
+services:
+  - type: web
+    name: govuk-frontend-example-ruby
+    runtime: docker
+    plan: free
+    region: oregon
+    branch: main
+    healthCheckPath: /health
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DEMOS_ENABLED
+        value: "true"
+      - key: RAILS_ENV
+        value: "production"
+      - key: RACK_ENV
+        value: "production"
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: RAILS_LOG_TO_STDOUT
+        value: "true"
+      - key: RAILS_SERVE_STATIC_FILES
+        value: "true"

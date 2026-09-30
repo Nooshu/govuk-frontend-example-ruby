@@ -1,17 +1,8 @@
-# GOV.UK Frontend example
+# GOV.UK Frontend example (Ruby)
 
-**Base template** for **GDS-compliant** government frontends: standardised backends (TypeScript, Go, Python, …) + **[GOV.UK Frontend](https://frontend.design-system.service.gov.uk/)** (macros / fixtures as the HTML contract) — **no** React/Vue/Angular/Svelte for UI. Official fixtures enable **100% HTML parity** testing of backend output. Node-adjacent lines may call Nunjucks macros directly; other languages generate HTML natively.
+**Ruby + Rails** specialised line: server-rendered HTML with **[GOV.UK Frontend](https://frontend.design-system.service.gov.uk/)** as the only UI component library — **no** React/Vue/Angular/Svelte. Official fixtures enable **100% HTML parity** testing of Ruby/ViewComponent output. Component HTML is generated **natively in Ruby** (never Nunjucks/Node at request time).
 
-**Implementation language: TBD** — see [`docs/tech-stack.md`](docs/tech-stack.md).
-
-## Language lines
-
-Specialised repos that track this template’s shared playbooks via a `template` remote + path sync:
-
-| Line              | Repository                                                                                              |
-| ----------------- | ------------------------------------------------------------------------------------------------------- |
-| TypeScript (Node) | [Nooshu/govuk-frontend-example-typescript](https://github.com/Nooshu/govuk-frontend-example-typescript) |
-| Go                | [Nooshu/govuk-frontend-example-go](https://github.com/Nooshu/govuk-frontend-example-go)                 |
+**Implementation language: Ruby / Rails 8** — see [`docs/tech-stack.md`](docs/tech-stack.md).
 
 ## Priorities
 
@@ -26,14 +17,17 @@ Frontend web performance → frontend security → reduced maintenance → acces
 
 How docs are split for both audiences: [`docs/documentation-structure.md`](docs/documentation-structure.md).
 
-## Quick local checks (docs / Node tooling)
+## Quick local start
 
 ```sh
-npm install
-npm run build:styles
-npm test
-npm run verify:docs
+npm ci
+bundle install
+npm start          # builds Sass, then bin/rails server — http://127.0.0.1:3000
+npm test           # Node baseline/Sass + RSpec (fixture parity + 100% coverage)
+npm run verify     # docs + styles + RuboCop + tests
 ```
+
+Requires **Node 22+** (GOV.UK Frontend pin + Sass) and **Ruby 3.3+** / Bundler.
 
 ## Licence and security
 

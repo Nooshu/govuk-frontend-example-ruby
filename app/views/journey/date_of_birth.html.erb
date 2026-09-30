@@ -1,0 +1,5 @@
+<%= govuk_form do %>
+  <%= render "shared/form_errors" %>
+  <%= govuk("date-input", @date_of_birth) %>
+  <%= govuk("button", @continue_button) %>
+<% end %>

@@ -1,0 +1,5 @@
+<%= form_with url: "/check-answers", method: :post, local: true, html: { novalidate: true } do %>
+  <h1 class="govuk-heading-l"><%= @layout[:heading] %></h1>
+  <%= govuk("summary-list", @summary_list) %>
+  <%= govuk("button", @submit_button) %>
+<% end %>
