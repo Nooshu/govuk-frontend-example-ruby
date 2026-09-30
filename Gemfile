@@ -7,7 +7,7 @@ gem "rack-brotli"
 gem "rails", "~> 8.0.2"
 gem "view_component", "~> 4.0"
 # Rails 8.0 still passes quirks_mode to JSON; json 3.x removed that keyword.
-gem "json", "~> 2.10"
+gem "json", "~> 3.0"
 gem "tzinfo-data", platforms: %i[windows jruby]
 
 group :development, :test do
