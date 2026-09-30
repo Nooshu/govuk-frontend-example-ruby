@@ -1,0 +1,5 @@
+<%= govuk_form do %>
+  <%= render "shared/form_errors" %>
+  <%= govuk("character-count", @details) %>
+  <%= govuk("button", @continue_button) %>
+<% end %>

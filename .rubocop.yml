@@ -1,0 +1,118 @@
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.3
+  Exclude:
+    - "db/**/*"
+    - "bin/**/*"
+    - "vendor/**/*"
+    - "node_modules/**/*"
+    - "tmp/**/*"
+    - "log/**/*"
+    # Auto-ported Nunjucks ports — style noise; parity suite is the contract.
+    - "lib/govuk/components_*.rb"
+
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/Documentation:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 120
+
+Metrics/ClassLength:
+  Max: 400
+
+Metrics/ModuleLength:
+  Max: 400
+
+Metrics/AbcSize:
+  Max: 100
+
+Metrics/CyclomaticComplexity:
+  Max: 50
+
+Metrics/PerceivedComplexity:
+  Max: 50
+
+Metrics/BlockLength:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Max: 12
+
+Layout/LineLength:
+  Max: 160
+
+Layout/HashAlignment:
+  Enabled: false
+
+Naming/MethodParameterName:
+  MinNameLength: 1
+
+Naming/BlockForwarding:
+  Enabled: false
+
+Naming/PredicateMethod:
+  Enabled: false
+
+Style/ArgumentsForwarding:
+  Enabled: false
+
+Style/FormatStringToken:
+  Enabled: false
+
+Style/MultipleComparison:
+  Enabled: false
+
+Rails/Delegate:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+
+Rails/NegateInclude:
+  Enabled: false
+
+Rails/RedundantActiveRecordAllMethod:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 100
+
+RSpec/MultipleExpectations:
+  Max: 40
+
+RSpec/MultipleDescribes:
+  Enabled: false
+
+RSpec/DescribeClass:
+  Enabled: false
+
+RSpec/ExpectActual:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 5

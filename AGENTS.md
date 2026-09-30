@@ -9,9 +9,9 @@
 
 # GOV.UK Frontend example
 
-**Base template** for **GDS-compliant** government frontends: standardised **backend** languages (e.g. TypeScript, Go, Python) generate HTML; **[GOV.UK Frontend](https://frontend.design-system.service.gov.uk/)** (latest pinned version) is the **only** UI component library. **No frontend frameworks** (React, Vue, Angular, Svelte, etc.) for UI.
+**Ruby specialised line** for **GDS-compliant** government frontends: **Ruby / Rails / ViewComponent** generate HTML; **[GOV.UK Frontend](https://frontend.design-system.service.gov.uk/)** (latest pinned version) is the **only** UI component library. **No frontend frameworks** (React, Vue, Angular, Svelte, etc.) for UI.
 
-All component HTML should track **GOV.UK Frontend macros** / `template.njk` — Nunjucks in-process on Node-adjacent stacks; **native** HTML generation on Go, Python, and other backends (do not shell out to Node just to render). Never long-term copy-paste release HTML. Official **test fixtures** from each Frontend release are the contract: the **backend language’s HTML** must match every fixture `html` byte-for-byte. A Nunjucks-only check is not enough.
+All component HTML should track **GOV.UK Frontend macros** / `template.njk` via **native Ruby** renderers in `lib/govuk` (do not shell out to Node just to render). Never long-term copy-paste release HTML. Official **test fixtures** from each Frontend release are the contract: the **Ruby HTML** must match every fixture `html` byte-for-byte. A Nunjucks-only check is not enough.
 
 **LIVE guidance** — [Design System feedback](https://design-system.service.gov.uk/community/feedback/).
 
@@ -36,11 +36,11 @@ Details: [`docs/priorities.md`](docs/priorities.md).
 | Dual-audience docs map    | [`docs/documentation-structure.md`](docs/documentation-structure.md), [`docs/README.md`](docs/README.md)                |
 | Project purpose           | [`docs/project-purpose.md`](docs/project-purpose.md)                                                                    |
 | Official guidance URLs    | [`docs/guidance-sources.md`](docs/guidance-sources.md)                                                                  |
-| Stack / language (TBD)    | [`docs/tech-stack.md`](docs/tech-stack.md)                                                                              |
+| Stack / language (Ruby)   | [`docs/tech-stack.md`](docs/tech-stack.md)                                                                              |
 
-**Language rule:** Before an _implementation_ stack is recorded, stay agnostic about that wrapper language. After it is recorded, **every** feature and code change must follow that language’s **latest** best practices (project layout, typing, modules, tests, packaging, CI, lint) — without weakening the non-negotiables below. Prefer current stable idioms over outdated patterns. Record stack-specific conventions in [`docs/tech-stack.md`](docs/tech-stack.md).
+**Language rule:** This line is **Ruby / Rails**. Every feature and code change must follow **current Ruby and Rails** best practices (project layout, gems, tests, packaging, CI, lint) — without weakening the non-negotiables below. Prefer current stable idioms over outdated tutorials. Conventions: [`docs/tech-stack.md`](docs/tech-stack.md).
 
-**HTML generation:** On **Node-adjacent** stacks (e.g. TypeScript), calling Frontend’s Nunjucks macros in-process is appropriate. On **other** stacks (Go, Python, …), generate HTML **natively** in that language — do not require Node at request time for rendering. Always track Frontend’s macros/`template.njk` as the behaviour reference and prove backend ≡ fixtures. Never long-term copy-paste static HTML from each release.
+**HTML generation:** Generate component and page HTML **natively in Ruby** (`lib/govuk` + ViewComponent + ERB layouts). Do **not** require Node at request time for rendering. Always track Frontend’s macros/`template.njk` as the behaviour reference and prove Ruby ≡ fixtures. Never long-term copy-paste static HTML from each release.
 
 **GOV.UK Frontend’s own stack:** Frontend ships as a **Node** package with **Nunjucks** macros, official `fixtures.json`, and `template.njk` sources. Use Node for install, fixtures, Sass, and optional Nunjucks freshness checks. Refer to Nunjucks for macro options and escape behaviour even when the wrapper reimplements them.
 
@@ -51,7 +51,7 @@ Details: [`docs/priorities.md`](docs/priorities.md).
 ## Non-negotiables
 
 1. **GOV.UK Frontend macros are the HTML source of truth** — render via Nunjucks macros on Node-adjacent stacks, or via a native wrapper renderer that tracks those macros. Do **not** copy-paste component HTML from release notes or the Design System site as the long-term approach, and do **not** shell out to Node just to render HTML from a non-Node backend.
-2. **Backend HTML must match every official fixture** — for each shipped component, the **backend language’s rendered HTML** (TypeScript, Go, Python, …) is compared byte-for-byte to the `html` in that release’s `fixtures.json`, for **every** fixture. That is the primary parity gate. A Nunjucks-only check (macro output vs stored `html`) proves fixtures are fresh; it does **not** replace backend vs fixture comparison. No normalisation; never edit fixture `html` to pass tests. See [`docs/testing-components.md`](docs/testing-components.md).
+2. **Backend HTML must match every official fixture** — for each shipped component, the **Ruby** rendered HTML is compared byte-for-byte to the `html` in that release’s `fixtures.json`, for **every** fixture. That is the primary parity gate. A Nunjucks-only check (macro output vs stored `html`) proves fixtures are fresh; it does **not** replace Ruby vs fixture comparison. No normalisation; never edit fixture `html` to pass tests. See [`docs/testing-components.md`](docs/testing-components.md).
 3. **No frontend UI frameworks** — no React/Vue/Angular/Svelte (or similar) for GOV.UK UI; backend + GOV.UK Frontend only.
 4. **No ad-hoc custom CSS** — ship styles through the Sass pipeline in [`styles/`](styles/) (`application.scss` → GOV.UK Frontend `@use` → [`govuk-overrides.scss`](styles/govuk-overrides.scss) last). Prefer component options and Design System patterns; do not paste or serve Frontend’s prebuilt `govuk-frontend.min.css` as the long-term source. See [`docs/styles.md`](docs/styles.md).
 5. **No `!important` in service CSS** — overrides must win with cascade order and specificity only. This applies to every project using this template. Frontend’s own `govuk-!-…` utilities are upstream; do not copy that pattern into service styles.
@@ -65,7 +65,7 @@ Details: [`docs/priorities.md`](docs/priorities.md).
 13. **Performance and security baseline** — every response uses [`baseline/`](baseline/) (cache kind, OWASP headers, CSP hash for the `js-enabled` snippet). Language lines sync that directory; they do not invent a weaker set. See [`docs/frontend-performance.md`](docs/frontend-performance.md) and [`docs/frontend-security.md`](docs/frontend-security.md).
 14. **Split finished work into focused commits** — once a coherent piece of code or docs is complete, create **specific** commits with **comprehensive** messages (why, contract impact, how to verify). Do not leave a large mixed working tree; do not squash unrelated concerns into one commit. This applies to agents and humans using this template.
 15. **Document every change for humans and agents** — no feature, prompt-driven change, or behaviour lands without dual-audience docs updated in the right place (`/docs` detail, `AGENTS.md` / skill / rules links when contracts change, onboarding or CONTRIBUTING when workflow changes). Aim for easier onboarding and maintenance. See [`docs/documentation-structure.md`](docs/documentation-structure.md).
-16. **Follow the latest language best practices** — once [`docs/tech-stack.md`](docs/tech-stack.md) records a wrapper language, all new and changed code must match that language’s current best practices (not outdated tutorials). Shared Node tooling (Sass, baseline, fixtures) follows current Node/ESM practice. Never weaken Frontend, parity, security, or performance non-negotiables to chase a fad.
+16. **Follow the latest Ruby / Rails best practices** — see [`docs/tech-stack.md`](docs/tech-stack.md). Shared Node tooling (Sass, baseline, fixtures) follows current Node/ESM practice. Never weaken Frontend, parity, security, or performance non-negotiables to chase a fad.
 
 Using this repo does **not** make a service assessment-ready. See [`docs/service-assessment-readiness.md`](docs/service-assessment-readiness.md).
 

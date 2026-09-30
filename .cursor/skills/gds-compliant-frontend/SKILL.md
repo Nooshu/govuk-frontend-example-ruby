@@ -1,72 +1,57 @@
 ---
 name: gds-compliant-frontend
 description: >-
-  Builds GDS-compliant government frontends from this base template using
-  standardised backend languages (TypeScript, Go, Python, etc.) with GOV.UK
-  Frontend macros / fixtures as the HTML contract (Nunjucks in-process
-  on Node-adjacent stacks; native HTML generation elsewhere) and fixture
+  Builds GDS-compliant government frontends with Ruby / Rails / ViewComponent
+  and GOV.UK Frontend macros / fixtures as the HTML contract (native Ruby
+  HTML in lib/govuk; Node only for install, Sass, fixtures) and 100% fixture
   HTML parity, no SPA/frontend frameworks. Use when scaffolding services,
-  choosing stack, applying Service
-  Standard or Technology Code of Practice guidance, implementing GOV.UK
-  components/patterns, upgrading govuk-frontend, or verifying assessment-shaped UI.
+  implementing GOV.UK components/patterns, upgrading govuk-frontend, or
+  verifying assessment-shaped UI.
 ---
 
-# GDS-compliant frontend template
+# GDS-compliant frontend (Ruby)
 
 ## What this project is
 
-A **base template** for **GDS-compliant** frontends that:
+A **Ruby specialised line** for **GDS-compliant** frontends that:
 
-- Use **standardised backend technologies** (e.g. TypeScript/Node, Go, Python) for the server and HTML generation
-- Use **[GOV.UK Frontend](https://frontend.design-system.service.gov.uk/)** (latest pinned version) as the **only** frontend component library
-- Generate component HTML from Frontend’s macros/`template.njk` contract — Nunjucks in-process on Node-adjacent stacks; **native** HTML in Go/Python/etc. Do **not** copy-paste HTML from each Frontend release as the long-term approach, and do **not** shell out to Node solely to render HTML from a non-Node backend
-- Wire official **test fixtures** for extensive **100% HTML parity** testing of backend-generated markup
-- Do **not** use frontend frameworks (React, Vue, Angular, Svelte, Next.js client apps, etc.) for UI
+- Use **Ruby / Rails / ViewComponent / ERB** for the server and HTML generation
+- Use **[GOV.UK Frontend](https://frontend.design-system.service.gov.uk/)** (pinned version) as the **only** frontend component library
+- Generate component HTML **natively in Ruby** (`lib/govuk`) tracking Frontend macros/`template.njk` — do **not** shell out to Node for request-time HTML
+- Prove **100% HTML parity** against official `fixtures.json` (`Govuk.render` ≡ every fixture `html`)
+- Do **not** use frontend frameworks (React, Vue, Angular, Svelte, etc.) for UI
 
-Priorities (in order): frontend web performance → frontend security → reduced maintenance → accessibility → inclusive design. See [`docs/priorities.md`](../../../docs/priorities.md).
+Priorities: frontend web performance → frontend security → reduced maintenance → accessibility → inclusive design. See [`docs/priorities.md`](../../../docs/priorities.md).
 
-Detail for humans: [`docs/project-purpose.md`](../../../docs/project-purpose.md), [`docs/onboarding.md`](../../../docs/onboarding.md), [`CONTRIBUTING.md`](../../../CONTRIBUTING.md). Dual-audience map: [`docs/documentation-structure.md`](../../../docs/documentation-structure.md). Playbooks: [`AGENTS.md`](../../../AGENTS.md).
+Stack: [`docs/tech-stack.md`](../../../docs/tech-stack.md). Playbooks: [`AGENTS.md`](../../../AGENTS.md).
 
 ## Non-negotiable stack shape
 
-| Layer               | Choice                                                                                                                |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| UI                  | GOV.UK Frontend only (`govuk-*`, official JS via `initAll()`)                                                         |
-| HTML generation     | Nunjucks macros when Node-adjacent; otherwise native wrapper renderers that stay fixture-parity with those macros     |
-| Frontend frameworks | **Forbidden** for UI                                                                                                  |
-| Parity              | Official `fixtures.json` + ordinal HTML equality against backend output                                               |
-| Upstream            | Node package + Nunjucks / `template.njk` / fixtures (install/Sass/freshness — not required for non-Node request HTML) |
+| Layer               | Choice                                                                    |
+| ------------------- | ------------------------------------------------------------------------- |
+| UI                  | GOV.UK Frontend only (`govuk-*`, official JS via `initAll()`)             |
+| HTML generation     | Native Ruby renderers in `lib/govuk` + ViewComponent / ERB pages          |
+| Frontend frameworks | **Forbidden** for UI                                                      |
+| Parity              | Official `fixtures.json` + ordinal HTML equality                          |
+| Upstream            | Node package for install, Sass, fixtures freshness — not for request HTML |
 
-## Authoritative guidance (search these first)
+## Authoritative guidance
 
 1. [Technology Code of Practice](https://www.gov.uk/guidance/the-technology-code-of-practice)
-2. [Assisted digital support: an introduction](https://www.gov.uk/service-manual/helping-people-to-use-your-service/assisted-digital-support-introduction)
+2. [Assisted digital support](https://www.gov.uk/service-manual/helping-people-to-use-your-service/assisted-digital-support-introduction)
 3. [Service Standard](https://www.gov.uk/service-manual/service-standard)
 4. [Service Manual](https://www.gov.uk/service-manual)
 5. [GOV.UK Design System](https://design-system.service.gov.uk/)
 6. [GOV.UK Frontend](https://frontend.design-system.service.gov.uk/)
 
-Local index: [`docs/guidance-sources.md`](../../../docs/guidance-sources.md).
-
-## Upgrading Frontend
-
-**Always** read https://github.com/alphagov/govuk-frontend/releases/latest before changing the pin, then follow [`docs/upgrading-govuk-frontend.md`](../../../docs/upgrading-govuk-frontend.md). Refresh fixtures from the same version; fix renderers/macros usage — never edit fixture `html`.
-
-## Test coverage and HTML parity
-
-- **Code:** 100% functions, branches, statements (CI fails below).
-- **HTML (primary):** backend / library output must match official fixture `html` byte-for-byte for **every** fixture on every shipped component. See [`docs/testing-components.md`](../../../docs/testing-components.md).
-- **HTML (secondary):** Nunjucks suite proves stored fixtures still match Frontend macros — freshness only; it does **not** replace backend vs fixture parity.
-- Do not weaken either gate to satisfy the other; do not treat Nunjucks-only green as done.
-
 ## Workflow reminders
 
-1. Confirm wrapper language in [`docs/tech-stack.md`](../../../docs/tech-stack.md) (prefer Nunjucks when viable).
-2. Never hand-paste `govuk-*` component HTML; use macros / library API.
-3. Upgrade only after reviewing the [latest release](https://github.com/alphagov/govuk-frontend/releases/latest).
-4. New components: [`docs/creating-components.md`](../../../docs/creating-components.md). Patterns: [`docs/creating-patterns.md`](../../../docs/creating-patterns.md).
-5. HTTP responses use [`baseline/`](../../../baseline/) — performance cache kinds and OWASP headers. Compress with Brotli (`br`); Gzip is only the fallback when the client does not advertise `br`. Playbooks: [`docs/frontend-performance.md`](../../../docs/frontend-performance.md), [`docs/frontend-security.md`](../../../docs/frontend-security.md). Language lines sync `baseline/`; they do not fork a weaker policy.
-6. Compile CSS via Sass (`styles/application.scss` → Frontend `@use` → `govuk-overrides.scss` last). Never use `!important` in service CSS. Playbook: [`docs/styles.md`](../../../docs/styles.md).
-7. Document every change for **humans and agents** in the same change set ([`docs/documentation-structure.md`](../../../docs/documentation-structure.md)). Update `/docs`, and `AGENTS.md` / skill / rules when contracts change.
-8. Follow the **latest** best practices for the wrapper language in [`docs/tech-stack.md`](../../../docs/tech-stack.md) (and current Node/ESM for shared tooling). Do not fossilise outdated patterns.
-9. When a coherent piece of work is finished, split it into focused commits with comprehensive messages — do not leave a large mixed working tree.
+1. Follow Ruby/Rails practices in [`docs/tech-stack.md`](../../../docs/tech-stack.md).
+2. Never hand-paste `govuk-*` markup; use `Govuk.render` / ViewComponents.
+3. Upgrade Frontend only after reading the [latest release](https://github.com/alphagov/govuk-frontend/releases/latest).
+4. New components: [`docs/creating-components.md`](../../../docs/creating-components.md).
+5. HTTP responses use [`baseline/`](../../../baseline/).
+6. Sass: `styles/application.scss` → Frontend `@use` → `govuk-overrides.scss` last; no `!important`.
+7. Document every change for humans and agents.
+8. Preview parity banners must compute `rendered == fixture.html` live.
+9. Split finished work into focused commits.

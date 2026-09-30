@@ -6,10 +6,10 @@ Authoritative upstream: https://frontend.design-system.service.gov.uk/testing-yo
 
 ## What must be compared
 
-| Compare                                              | Required?              | Purpose                                                                           |
-| ---------------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------- |
-| **Backend / library HTML → official fixture `html`** | **Yes — primary gate** | Proves the wrapper language’s interpretation of the component matches the release |
-| **Nunjucks macro HTML → stored fixture `html`**      | Yes — secondary        | Proves fixtures are not stale relative to the pinned Frontend macros              |
+| Compare                                              | Required?              | Purpose                                                               |
+| ---------------------------------------------------- | ---------------------- | --------------------------------------------------------------------- |
+| **Backend / library HTML → official fixture `html`** | **Yes — primary gate** | Proves the Ruby’s interpretation of the component matches the release |
+| **Nunjucks macro HTML → stored fixture `html`**      | Yes — secondary        | Proves fixtures are not stale relative to the pinned Frontend macros  |
 
 **Do not** ship a setup that only compares Nunjucks macros to fixture HTML. That never exercises the backend language’s renderer. Language lines and services built from this template must run the **parity suite** against backend output for **every** fixture in every shipped component’s `fixtures.json` from the pinned GOV.UK Frontend release.
 
@@ -63,7 +63,7 @@ Document in [tech-stack.md](tech-stack.md):
 - Nunjucks fixture verification (Node + `govuk-frontend`) — freshness
 - a single “verify” gate for local + CI that includes the parity suite
 
-Today, before a wrapper language exists, the shared baseline and Sass pipeline are covered by Node’s test runner (`npm test`). When a wrapper lands, its parity suite becomes part of `verify`.
+This Ruby line covers shared baseline/Sass via Node (`npm run test:node`) and **backend parity** via RSpec (`bundle exec rspec` / `npm test`). Both are required in `npm run verify` and CI.
 
 ## Preview as human parity browser
 

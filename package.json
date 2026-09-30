@@ -1,20 +1,24 @@
 {
-  "name": "govuk-frontend-example",
+  "name": "govuk-frontend-example-ruby",
   "version": "0.0.0",
   "private": true,
-  "description": "Base template for GDS-compliant frontends using GOV.UK Frontend (wrapper language TBD). Shared Sass pipeline, performance/security baseline, and Node tooling for docs hygiene.",
+  "description": "GOV.UK Frontend example using Ruby, Rails, and ViewComponent with official fixture HTML parity.",
   "type": "module",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
     "build:styles": "node scripts/build-styles-cli.mjs",
+    "start": "npm run build:styles && ./scripts/with-ruby.sh bundle exec rails server -b 127.0.0.1 -p ${PORT:-3000}",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint:md": "markdownlint-cli2",
-    "test": "node --test --experimental-test-coverage --test-coverage-include='baseline/**/*.mjs' --test-coverage-include='scripts/build-styles.mjs' --test-coverage-lines=100 --test-coverage-branches=100 --test-coverage-functions=100",
+    "lint:ruby": "./scripts/with-ruby.sh bundle exec rubocop",
+    "test:node": "node --test --experimental-test-coverage --test-coverage-include='baseline/**/*.mjs' --test-coverage-include='scripts/build-styles.mjs' --test-coverage-lines=100 --test-coverage-branches=100 --test-coverage-functions=100",
+    "test:ruby": "./scripts/with-ruby.sh bundle exec rspec",
+    "test": "npm run test:node && npm run test:ruby",
     "verify:docs": "npm run format:check && npm run lint:md",
-    "verify": "npm run verify:docs && npm run build:styles && npm test"
+    "verify": "npm run verify:docs && npm run build:styles && npm run lint:ruby && npm test"
   },
   "dependencies": {
     "govuk-frontend": "6.5.1"

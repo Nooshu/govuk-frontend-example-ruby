@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build styles
+        run: npm run build:styles
+
+      - name: Verify docs
+        run: npm run verify:docs
+
+      - name: Node tests (baseline + Sass)
+        run: npm run test:node
+
+      - name: RuboCop
+        run: bundle exec rubocop
+
+      - name: RSpec (fixture parity + coverage)
+        run: bundle exec rspec
+        env:
+          RAILS_ENV: test
+          DEMOS_ENABLED: "true"

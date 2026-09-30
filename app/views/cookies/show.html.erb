@@ -1,0 +1,14 @@
+<% if @notice %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk("notification-banner", @notice) %>
+  </div>
+</div>
+<% end %>
+<%= form_with url: "/cookies", method: :post, local: true, html: { novalidate: true } do %>
+  <% if @error_summary %>
+    <%= govuk("error-summary", @error_summary) %>
+  <% end %>
+  <%= govuk("radios", @radios) %>
+  <%= govuk("button", @save_button) %>
+<% end %>

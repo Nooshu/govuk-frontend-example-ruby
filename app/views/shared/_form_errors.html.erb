@@ -1,0 +1,6 @@
+<% if @error_summary %>
+  <%= govuk("error-summary", @error_summary) %>
+<% end %>
+<% if @return_to.present? %>
+  <input type="hidden" name="returnTo" value="<%= @return_to %>">
+<% end %>
