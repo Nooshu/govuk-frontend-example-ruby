@@ -8,10 +8,6 @@ module Licence
       STEPS
     end
 
-    def optional?(step_id)
-      OPTIONAL_STEPS.include?(step_id)
-    end
-
     def by_id(step_id)
       STEPS.find { |s| s.id == step_id }
     end
@@ -45,16 +41,17 @@ module Licence
     end
 
     def required_complete?(application)
-      STEPS.all? { |step| optional?(step.id) || application.completed?(step.id) }
+      STEPS.all? { |step| application.completed?(step.id) }
     end
 
     def first_incomplete(application)
-      STEPS.find { |step| !optional?(step.id) && !application.completed?(step.id) }
+      STEPS.find { |step| !application.completed?(step.id) }
     end
 
     def reference_for(session_key)
-      prefix = session_key.to_s[0, 6].to_s
-      "RL#{prefix.upcase}"
+      hex = session_key.to_s[0, 8].ljust(8, "0").gsub(/[^0-9a-fA-F]/, "0")
+      digits = hex.to_i(16).to_s.rjust(8, "0")[-8, 8]
+      "FR#{digits}"
     end
   end
 end

@@ -41,7 +41,11 @@ RSpec.describe "Coverage sweep", type: :request do
     get "/new-application"
     follow_redirect! if response.redirect?
 
-    post "/name", params: { "first-name" => "Ada", "last-name" => "Lovelace" }
+    post "/licence-length", params: { "licence-length" => "12-months" }
+    get "/licence-length"
+    expect(response).to have_http_status(:ok)
+
+    post "/name", params: { "full-name" => "Ada Lovelace" }
     get "/name"
     expect(response).to have_http_status(:ok)
 
@@ -51,48 +55,18 @@ RSpec.describe "Coverage sweep", type: :request do
     get "/date-of-birth"
     expect(response).to have_http_status(:ok)
 
-    post "/email", params: { email: "ada@example.com" }
-    get "/email"
-    expect(response).to have_http_status(:ok)
-
-    post "/contact-preference", params: { "contact-by" => "telephone", "telephone" => "01632 960 001" }
-    get "/contact-preference"
-    expect(response).to have_http_status(:ok)
-
-    post "/where-you-will-fish", params: { regions: %w[wales] }
+    post "/where-you-will-fish", params: { country: "Wales" }
     get "/where-you-will-fish"
     expect(response).to have_http_status(:ok)
 
-    post "/licence-length", params: { "licence-length" => "12-month" }
-    get "/licence-length"
-    expect(response).to have_http_status(:ok)
-
-    month = Licence::Options.start_months(Time.now.utc).first.value
-    post "/start-month", params: { "start-month" => month }
-    get "/start-month"
-    expect(response).to have_http_status(:ok)
-
-    post "/address", params: {
-      "address-line-1" => "1 Lake Road", "address-line-2" => "Flat 2",
-      "town" => "Keswick", "postcode" => "CA12 5BN"
-    }
-    get "/address"
-    expect(response).to have_http_status(:ok)
-
-    get "/evidence"
-    expect(response).to have_http_status(:ok)
-
-    post "/additional-details", params: { "additional-details" => "None" }
-    get "/additional-details"
-    expect(response).to have_http_status(:ok)
-
-    get "/create-a-password"
+    post "/email", params: { email: "ada@example.com" }
+    get "/email"
     expect(response).to have_http_status(:ok)
 
     # return-to check answers
     get "/name?return=check-answers"
     expect(response).to have_http_status(:ok)
-    post "/name", params: { "first-name" => "Ada", "last-name" => "Lovelace", returnTo: "check-answers" }
+    post "/name", params: { "full-name" => "Ada Lovelace", returnTo: "check-answers" }
     expect(response).to redirect_to("/check-answers")
   end
 end

@@ -1,6 +1,6 @@
-# Example service (rod fishing licence)
+# Example service (fishing rod licence)
 
-The Rails app in this repo is a **demonstration** rod fishing licence journey — not a live government service.
+The Rails app in this repo is a **demonstration** fishing rod licence journey — not a live government service.
 
 ## Run locally
 
@@ -13,7 +13,7 @@ npm start   # Sass → dist/, then rails server on http://127.0.0.1:3000
 | Path                           | Purpose                                                                                       |
 | ------------------------------ | --------------------------------------------------------------------------------------------- |
 | `/`                            | Start page (English); `/cy` Welsh chrome                                                      |
-| `/task-list` … `/confirmation` | Session-backed journey with PRG, CSRF, `novalidate`, error summary                            |
+| `/licence-length` … `/confirmation` | 7-step session journey (length → name → DOB → country → email → check → confirmation) with PRG, CSRF, `novalidate`, error summary |
 | `/components`                  | Catalogue + live fixture parity banner (`Govuk.render` ≡ fixture `html`) when `DEMOS_ENABLED` |
 | `/health`                      | Plain `ok`                                                                                    |
 | `/robots.txt`                  | `Disallow: /`                                                                                 |

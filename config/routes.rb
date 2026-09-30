@@ -11,11 +11,8 @@ Rails.application.routes.draw do
   get "/cy", to: "start#show", defaults: { lang: "cy" }
   get "/new-application", to: "start#new_application"
 
-  get "/task-list", to: "task_list#show"
-
   journey_steps = %w[
-    name date-of-birth email contact-preference where-you-will-fish
-    licence-length start-month address evidence additional-details create-a-password
+    licence-length name date-of-birth where-you-will-fish email
   ]
   journey_steps.each do |step|
     get "/#{step}", to: "journey#show", defaults: { step: step }

@@ -1,9 +1,0 @@
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl"><%= @layout[:heading] %></h1>
-    <% @sections.each do |section| %>
-      <h2 class="govuk-heading-m" id="<%= section[:id_prefix] %>"><%= section[:heading] %></h2>
-      <%= govuk("task-list", section[:task_list]) %>
-    <% end %>
-  </div>
-</div>

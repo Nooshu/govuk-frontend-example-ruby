@@ -1,7 +1,5 @@
 <%= govuk_form do %>
   <%= render "shared/form_errors" %>
-  <h1 class="govuk-heading-l"><%= @layout[:heading] %></h1>
-  <%= govuk("input", @first_name) %>
-  <%= govuk("input", @last_name) %>
+  <%= govuk("input", @full_name) %>
   <%= govuk("button", @continue_button) %>
 <% end %>

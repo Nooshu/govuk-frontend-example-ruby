@@ -15,24 +15,34 @@ module Licence
       }
     end
 
-    def name_fields(application, errors)
+    def name_field(application, errors)
       {
-        firstName: text_input("first-name", "First name", application.first_name, errors,
-                              { "autocomplete" => "given-name", "classes" => "govuk-input--width-20", "spellcheck" => false }),
-        lastName: text_input("last-name", "Last name", application.last_name, errors,
-                             { "autocomplete" => "family-name", "classes" => "govuk-input--width-20", "spellcheck" => false })
+        fullName: text_input(
+          "full-name", "What is your full name?", application.full_name, errors,
+          {
+            "autocomplete" => "name",
+            "label" => {
+              "text" => "What is your full name?",
+              "isPageHeading" => true,
+              "classes" => "govuk-label--l"
+            }
+          }
+        )
       }
     end
 
     def email_field(application, errors)
       {
         email: text_input(
-          "email", "Email address", application.email, errors,
+          "email", "What is your email address?", application.email, errors,
           {
             "type" => "email", "autocomplete" => "email", "spellcheck" => false,
-            "classes" => "govuk-input--width-20",
-            "hint" => { "text" => "We will send the decision to this address" },
-            "label" => { "text" => "What is your email address?", "isPageHeading" => true, "classes" => "govuk-label--l" }
+            "hint" => { "text" => "This example stores the address in your browser session only." },
+            "label" => {
+              "text" => "What is your email address?",
+              "isPageHeading" => true,
+              "classes" => "govuk-label--l"
+            }
           }
         )
       }
@@ -43,87 +53,55 @@ module Licence
         "id" => "date-of-birth",
         "namePrefix" => "date-of-birth",
         "fieldset" => {
-          "legend" => { "text" => "What is your date of birth?", "isPageHeading" => true, "classes" => "govuk-fieldset__legend--l" }
+          "legend" => {
+            "text" => "What is your date of birth?",
+            "isPageHeading" => true,
+            "classes" => "govuk-fieldset__legend--l"
+          }
         },
         "hint" => { "text" => "For example, 31 3 1980" },
         "items" => [
-          { "name" => "day", "autocomplete" => "bday-day", "value" => application.day },
-          { "name" => "month", "autocomplete" => "bday-month", "value" => application.month },
-          { "name" => "year", "autocomplete" => "bday-year", "value" => application.year }
+          { "name" => "day", "value" => application.day },
+          { "name" => "month", "value" => application.month },
+          { "name" => "year", "value" => application.year }
         ]
       }
       add_error(date, errors, "date-of-birth")
       { dateOfBirth: date }
     end
 
-    def contact_fields(application, errors)
-      telephone = text_input(
-        "telephone", "Telephone number", application.telephone, errors,
-        { "type" => "tel", "autocomplete" => "tel", "classes" => "govuk-input--width-20" }
-      )
-      conditional = Govuk.must_render("input", Govuk::Params.params_from_mapping(telephone))
-      items = Options::CONTACT_OPTIONS.map do |option|
-        if option.value == CONTACT_BY_TELEPHONE
-          {
-            "value" => option.value,
-            "text" => option.text,
-            "checked" => application.contact_by == CONTACT_BY_TELEPHONE,
-            "conditional" => { "html" => Govuk::Safe.new(conditional) }
-          }
-        else
-          {
-            "value" => option.value,
-            "text" => option.text,
-            "id" => "contact-by",
-            "checked" => application.contact_by == option.value
-          }
-        end
-      end
-      radios = {
-        "idPrefix" => "contact-by",
-        "name" => "contact-by",
-        "fieldset" => {
-          "legend" => { "text" => "How should we contact you?", "isPageHeading" => true, "classes" => "govuk-fieldset__legend--l" }
-        },
-        "hint" => { "text" => "We will use this if we need to ask about your application" },
-        "items" => items
-      }
-      add_error(radios, errors, "contact-by")
-      { radios: radios }
-    end
-
-    def region_fields(application, errors)
-      chosen = application.regions
-      items = Options::REGIONS.each_with_index.map do |region, index|
-        item = { "value" => region.value, "text" => region.text, "checked" => chosen.include?(region.value) }
-        item["id"] = "regions" if index.zero?
+    def country_fields(application, errors)
+      items = Options::COUNTRIES.each_with_index.map do |option, index|
+        item = {
+          "value" => option.value,
+          "text" => option.text,
+          "checked" => application.country == option.value
+        }
+        item["id"] = "country" if index.zero?
         item
       end
-      items << { "divider" => "or" }
-      items << {
-        "value" => NOT_SURE,
-        "text" => "I have not decided yet",
-        "behaviour" => "exclusive",
-        "checked" => chosen.include?(NOT_SURE)
-      }
-      checkboxes = {
-        "idPrefix" => "where",
-        "name" => "regions",
+      radios = {
+        "idPrefix" => "country",
+        "name" => "country",
         "fieldset" => {
-          "legend" => { "text" => "Where will you fish?", "isPageHeading" => true, "classes" => "govuk-fieldset__legend--l" }
+          "legend" => {
+            "text" => "Where will you fish?",
+            "isPageHeading" => true,
+            "classes" => "govuk-fieldset__legend--l"
+          }
         },
-        "hint" => { "text" => "Select all that apply" },
+        "hint" => { "text" => "This example is fictional. It does not check a real fishing area." },
         "items" => items
       }
-      add_error(checkboxes, errors, "regions")
-      { checkboxes: checkboxes }
+      add_error(radios, errors, "country")
+      { radios: radios }
     end
 
     def licence_fields(application, errors)
       items = Options::LICENCE_LENGTHS.each_with_index.map do |option, index|
         item = {
           "value" => option.value,
-          "text" => "#{option.text} (#{option.fee})",
+          "text" => option.text,
           "checked" => application.licence_length == option.value
         }
         item["id"] = "licence-length" if index.zero?
@@ -134,7 +112,7 @@ module Licence
         "name" => "licence-length",
         "fieldset" => {
           "legend" => {
-            "text" => "How long do you need a licence for?",
+            "text" => "How long do you need the licence for?",
             "isPageHeading" => true,
             "classes" => "govuk-fieldset__legend--l"
           }
@@ -143,98 +121,6 @@ module Licence
       }
       add_error(radios, errors, "licence-length")
       { radios: radios }
-    end
-
-    def month_field(application, errors, now = nil)
-      months = Options.start_months(now)
-      items = [{ "value" => "", "text" => "Select a month", "selected" => application.start_month == "" }]
-      months.each do |month|
-        items << {
-          "value" => month.value,
-          "text" => month.text,
-          "selected" => application.start_month == month.value
-        }
-      end
-      field = {
-        "id" => "start-month",
-        "name" => "start-month",
-        "label" => {
-          "text" => "When should the licence start?",
-          "isPageHeading" => true,
-          "classes" => "govuk-label--l"
-        },
-        "items" => items
-      }
-      add_error(field, errors, "start-month")
-      { select: field }
-    end
-
-    def address_fields(application, errors)
-      line1 = text_input("address-line-1", "Address line 1", application.address_line_1, errors, { "autocomplete" => "address-line1" })
-      line2 = text_input("address-line-2", "Address line 2 (optional)", application.address_line_2, errors, { "autocomplete" => "address-line2" })
-      town = text_input("town", "Town or city", application.town, errors, { "autocomplete" => "address-level2", "classes" => "govuk-input--width-20" })
-      postcode = text_input(
-        "postcode", "Postcode", application.postcode, errors,
-        { "autocomplete" => "postal-code", "classes" => "govuk-input--width-10", "spellcheck" => false }
-      )
-      lines =
-        Govuk.must_render("input", Govuk::Params.params_from_mapping(line1)) +
-        Govuk.must_render("input", Govuk::Params.params_from_mapping(line2)) +
-        Govuk.must_render("input", Govuk::Params.params_from_mapping(town)) +
-        Govuk.must_render("input", Govuk::Params.params_from_mapping(postcode))
-      {
-        fieldset: {
-          "legend" => { "text" => "What is your address?", "isPageHeading" => true, "classes" => "govuk-fieldset__legend--l" },
-          "html" => Govuk::Safe.new(lines)
-        },
-        inset: {
-          "text" => "This example asks you to type your address. It does not look up addresses from a postcode."
-        }
-      }
-    end
-
-    def evidence_field(application, errors)
-      upload = {
-        "id" => "evidence",
-        "name" => "evidence",
-        "label" => { "text" => "Upload evidence of a concession", "isPageHeading" => true, "classes" => "govuk-label--l" },
-        "hint" => { "text" => "PDF, PNG, or JPG. You can skip this question if you do not have a concession." }
-      }
-      add_error(upload, errors, "evidence")
-      { currentFile: application.evidence_filename, upload: upload }
-    end
-
-    def details_field(application, errors)
-      details = {
-        "name" => "additional-details",
-        "id" => "additional-details",
-        "maxlength" => 200,
-        "threshold" => 75,
-        "value" => application.additional_details,
-        "label" => { "text" => "Is there anything else we should know?", "isPageHeading" => true, "classes" => "govuk-label--l" },
-        "hint" => { "text" => "You can skip this question. Do not include payment card numbers or passwords." }
-      }
-      add_error(details, errors, "additional-details")
-      { details: details }
-    end
-
-    def password_fields(errors)
-      password = {
-        "id" => "password",
-        "name" => "password",
-        "autocomplete" => "new-password",
-        "label" => { "text" => "Create a password", "isPageHeading" => true, "classes" => "govuk-label--l" },
-        "hint" => { "text" => "Must be at least 8 characters. This example does not store your password." }
-      }
-      add_error(password, errors, "password")
-      confirm = {
-        "id" => "password-confirm",
-        "name" => "password-confirm",
-        "autocomplete" => "new-password",
-        "label" => { "text" => "Confirm password" }
-      }
-      add_error(confirm, errors, "password-confirm")
-      { password: password, confirm: confirm }
     end
 
     def cookie_fields(choice, errors)
@@ -269,7 +155,7 @@ module Licence
         "captionClasses" => "govuk-table__caption--m",
         "firstCellIsHeader" => true,
         "head" => [{ "text" => "Licence" }, { "text" => "Fee", "format" => "numeric" }],
-        "rows" => Options::LICENCE_LENGTHS.map { |option| [{ "text" => option.text }, { "text" => option.fee, "format" => "numeric" }] }
+        "rows" => Options::LICENCE_FEES.map { |option| [{ "text" => option.text }, { "text" => option.fee, "format" => "numeric" }] }
       }
     end
 
@@ -279,7 +165,9 @@ module Licence
         "items" => [
           {
             "heading" => { "text" => "Who can apply" },
-            "content" => { "text" => "You can apply if you are 13 or over and you will fish with a rod in England or Wales." }
+            "content" => {
+              "text" => "You can apply if you are 13 or over and you will fish with a rod in England, Wales or Scotland."
+            }
           },
           {
             "heading" => { "text" => "What a licence covers" },
@@ -312,7 +200,8 @@ module Licence
             "panel" => {
               "html" => Govuk::Safe.new(
                 '<h2 class="govuk-heading-l">Before you apply</h2>' \
-                '<p class="govuk-body">You need your name, date of birth, email address, and home address.</p>'
+                '<p class="govuk-body">You need how long you need the licence, your name, date of birth, ' \
+                "the country where you will fish, and your email address.</p>"
               )
             }
           },
@@ -345,7 +234,7 @@ module Licence
     def confirmation_panel(reference)
       {
         "titleText" => "Application complete",
-        "html" => Govuk::Safe.new("Your reference number<br><strong>#{CGI.escapeHTML(reference)}</strong>")
+        "html" => Govuk::Safe.new("Your example reference number<br><strong>#{CGI.escapeHTML(reference)}</strong>")
       }
     end
 

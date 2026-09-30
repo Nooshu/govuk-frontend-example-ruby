@@ -6,7 +6,7 @@ class StartController < ApplicationController
     welsh = lang == "cy"
 
     pick = ->(en, cy) { welsh ? cy : en }
-    heading = pick.call("Apply for a rod fishing licence", "Gwneud cais am drwydded bysgota")
+    heading = pick.call("Apply for a fishing rod licence", "Gwneud cais am drwydded bysgota")
     layout_assign(heading: heading, lang: lang, show_feedback: true)
 
     @lede = pick.call(
@@ -16,7 +16,7 @@ class StartController < ApplicationController
     @timing = pick.call("Applying takes about 10 minutes.", "Mae’n cymryd tua 10 munud.")
     @start_button = {
       "text" => pick.call("Start now", "Dechrau nawr"),
-      "href" => "/task-list",
+      "href" => "/licence-length",
       "isStartButton" => true
     }
     @notification = {
@@ -40,8 +40,18 @@ class StartController < ApplicationController
       )
     }
     details_html = pick.call(
-      '<ul class="govuk-list govuk-list--bullet"><li>Your name</li><li>Your date of birth</li><li>Your address</li></ul>',
-      '<ul class="govuk-list govuk-list--bullet"><li>Eich enw</li><li>Eich dyddiad geni</li><li>Eich cyfeiriad</li></ul>'
+      '<ul class="govuk-list govuk-list--bullet">' \
+      "<li>How long you need the licence</li>" \
+      "<li>Your name</li>" \
+      "<li>Your date of birth</li>" \
+      "<li>The country where you will fish</li>" \
+      "<li>Your email address</li></ul>",
+      '<ul class="govuk-list govuk-list--bullet">' \
+      "<li>Pa mor hir mae angen y drwydded</li>" \
+      "<li>Eich enw</li>" \
+      "<li>Eich dyddiad geni</li>" \
+      "<li>Y wlad lle byddwch yn pysgota</li>" \
+      "<li>Eich cyfeiriad e-bost</li></ul>"
     )
     @details = {
       "summaryText" => pick.call("What you will need", "Beth fydd ei angen arnoch"),

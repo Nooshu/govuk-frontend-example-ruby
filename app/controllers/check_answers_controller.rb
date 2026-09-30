@@ -10,12 +10,12 @@ class CheckAnswersController < ApplicationController
 
     layout_assign(
       heading: "Check your answers",
-      back_link: { "text" => "Back", "href" => "/create-a-password" },
+      back_link: { "text" => "Back", "href" => "/email" },
       main_classes: "govuk-main-wrapper--l",
       personal: true
     )
-    @summary_list = { "rows" => Licence::Answers.summary_rows(application, Time.now.utc) }
-    @submit_button = { "text" => "Submit application" }
+    @summary_list = { "rows" => Licence::Answers.summary_rows(application) }
+    @submit_button = { "text" => "Accept and continue" }
   end
 
   def create

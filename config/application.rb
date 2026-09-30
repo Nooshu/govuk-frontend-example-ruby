@@ -30,8 +30,8 @@ module GovukFrontendExampleRuby
         %w[1 true yes].include?(demos_env.downcase)
       end
 
-    config.service_name = "Apply for a rod fishing licence"
-    config.service_name_cy = "Gwneud cais am drwydded pysgota â gwialen"
+    config.service_name = "Apply for a fishing rod licence"
+    config.service_name_cy = "Gwneud cais am drwydded bysgota"
     config.govuk_frontend_version = "6.5.1"
     config.govuk_frontend_root = Rails.root.join("node_modules/govuk-frontend")
     config.govuk_components_dir = Rails.root.join("node_modules/govuk-frontend/dist/govuk/components")

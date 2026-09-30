@@ -1,8 +1,0 @@
-<%= govuk_form(enctype: @enctype) do %>
-  <%= render "shared/form_errors" %>
-  <%= govuk("file-upload", @upload) %>
-  <% if @current_file.present? %>
-    <p class="govuk-body">Current file: <%= @current_file %></p>
-  <% end %>
-  <%= govuk("button", @continue_button) %>
-<% end %>
