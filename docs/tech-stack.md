@@ -42,6 +42,8 @@ npm run lint:ruby      # RuboCop
 npm run verify         # docs + build:styles + lint:ruby + tests
 ```
 
+`verify:docs` ignores generated trees (`node_modules`, `vendor`, `coverage`, `dist`, `tmp`, `log`) so Bundler’s CI cache under `vendor/bundle` is not linted.
+
 ## Shared baseline
 
 [`baseline/`](../baseline/) is part of this template’s contract. This line **implements the same policy in Ruby**, reading [`baseline/policy.json`](../baseline/policy.json). It does not call the Node helpers at request time.
