@@ -10,14 +10,14 @@ bundle install
 npm start   # Sass → dist/, then rails server on http://127.0.0.1:3000
 ```
 
-| Path                           | Purpose                                                                                       |
-| ------------------------------ | --------------------------------------------------------------------------------------------- |
-| `/`                            | Start page (English); `/cy` Welsh chrome                                                      |
+| Path                                | Purpose                                                                                                                           |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                                 | Start page (English); `/cy` Welsh chrome                                                                                          |
 | `/licence-length` … `/confirmation` | 7-step session journey (length → name → DOB → country → email → check → confirmation) with PRG, CSRF, `novalidate`, error summary |
-| `/components`                  | Catalogue + live fixture parity banner (`Govuk.render` ≡ fixture `html`) when `DEMOS_ENABLED` |
-| `/health`                      | Plain `ok`                                                                                    |
-| `/robots.txt`                  | `Disallow: /`                                                                                 |
-| `/assets/*`                    | Fingerprinted CSS/JS + GOV.UK Frontend static assets                                          |
+| `/components`                       | Catalogue + live fixture parity banner (`Govuk.render` ≡ fixture `html`) when `DEMOS_ENABLED`                                     |
+| `/health`                           | Plain `ok`                                                                                                                        |
+| `/robots.txt`                       | `Disallow: /`                                                                                                                     |
+| `/assets/*`                         | Fingerprinted CSS/JS + GOV.UK Frontend static assets                                                                              |
 
 `DEMOS_ENABLED` defaults on outside production; set `DEMOS_ENABLED=true` to publish the catalogue in production (e.g. Render).
 
