@@ -11,7 +11,7 @@ AllCops:
     # Auto-ported Nunjucks ports — style noise; parity suite is the contract.
     - "lib/govuk/components_*.rb"
 
-require:
+plugins:
   - rubocop-rails
   - rubocop-rspec
 

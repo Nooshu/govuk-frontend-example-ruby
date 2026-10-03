@@ -71,9 +71,9 @@ end
 
 RSpec.describe Licence::Steps do
   it "orders steps and navigates previous/next" do
-    expect(described_class.all.map(&:id)).to eq(%w[
-      licence-length name date-of-birth where-you-will-fish email
-    ])
+    expect(described_class.all.map(&:id)).to eq(
+      %w[licence-length name date-of-birth where-you-will-fish email]
+    )
     first = described_class.all.first
     expect(described_class.by_id(first.id)).to eq(first)
     nxt = described_class.next_after(first.id)
