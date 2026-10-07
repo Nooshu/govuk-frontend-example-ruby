@@ -44,11 +44,17 @@ Stack: [`docs/tech-stack.md`](../../../docs/tech-stack.md). Playbooks: [`AGENTS.
 5. [GOV.UK Design System](https://design-system.service.gov.uk/)
 6. [GOV.UK Frontend](https://frontend.design-system.service.gov.uk/)
 
+## Upgrading Frontend
+
+**Pipeline gate:** do not start or finish a Frontend (or any other) dependency bump while CI is red — follow [`../safe-dependency-updates/SKILL.md`](../safe-dependency-updates/SKILL.md).
+
+Always read https://github.com/alphagov/govuk-frontend/releases/latest before changing the pin, then follow [`docs/upgrading-govuk-frontend.md`](../../../docs/upgrading-govuk-frontend.md). Refresh fixtures from the same version; fix renderers — never edit fixture `html`.
+
 ## Workflow reminders
 
 1. Follow Ruby/Rails practices in [`docs/tech-stack.md`](../../../docs/tech-stack.md).
 2. Never hand-paste `govuk-*` markup; use `Govuk.render` / ViewComponents.
-3. Upgrade Frontend only after reading the [latest release](https://github.com/alphagov/govuk-frontend/releases/latest).
+3. Upgrade Frontend only after reading the [latest release](https://github.com/alphagov/govuk-frontend/releases/latest), with CI green per [`safe-dependency-updates`](../safe-dependency-updates/SKILL.md).
 4. New components: [`docs/creating-components.md`](../../../docs/creating-components.md).
 5. HTTP responses use [`baseline/`](../../../baseline/).
 6. Sass: `styles/application.scss` → Frontend `@use` → `govuk-overrides.scss` last; no `!important`.
