@@ -55,4 +55,4 @@ Details: [testing-components.md](testing-components.md).
 
 ## Deploy
 
-Public demo on Render.com free tier: [deploying-on-render.md](deploying-on-render.md).
+Public demo on Google Cloud Run: [deploying-on-cloud-run.md](deploying-on-cloud-run.md).

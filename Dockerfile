@@ -1,4 +1,4 @@
-# Multi-stage build for Render.com free tier (and local Docker).
+# Multi-stage build for Cloud Run (and local Docker).
 # Stage 1: Node — install Frontend pin and compile Sass
 # Stage 2: Bundle install
 # Stage 3: Runtime — Puma + assets + baseline
@@ -57,5 +57,5 @@ COPY config.ru Rakefile ./
 RUN mkdir -p tmp/pids tmp/cache log \
   && chmod +x bin/rails bin/rake
 
-EXPOSE 3000
-CMD ["bash", "-c", "exec bundle exec puma -C config/puma.rb -b tcp://0.0.0.0:${PORT:-3000}"]
+EXPOSE 8080
+CMD ["bash", "-c", "exec bundle exec puma -C config/puma.rb -b tcp://0.0.0.0:${PORT:-8080}"]

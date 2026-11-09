@@ -22,7 +22,7 @@ How we keep docs dual-purpose: [documentation-structure.md](documentation-struct
 | [frontend-security.md](frontend-security.md)             | OWASP response headers, CSP, cookies             |
 | [tech-stack.md](tech-stack.md)                           | Ruby / Rails stack + Frontend Node/Nunjucks      |
 | [example-service.md](example-service.md)                 | Rod licence journey, routes, how to run          |
-| [deploying-on-render.md](deploying-on-render.md)         | Render.com free-tier Docker deploy               |
+| [deploying-on-cloud-run.md](deploying-on-cloud-run.md)   | Google Cloud Run Docker deploy                   |
 | [guidance-sources.md](guidance-sources.md)               | Official GDS / Service Manual / Frontend URLs    |
 | [documentation-structure.md](documentation-structure.md) | Dual-audience docs + language practice rules     |
 | [CONTRIBUTING.md](../CONTRIBUTING.md)                    | How to contribute, local checks, PR expectations |

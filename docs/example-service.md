@@ -19,7 +19,7 @@ npm start   # Sass → dist/, then rails server on http://127.0.0.1:3000
 | `/robots.txt`                       | `Disallow: /`                                                                                                                     |
 | `/assets/*`                         | Fingerprinted CSS/JS + GOV.UK Frontend static assets                                                                              |
 
-`DEMOS_ENABLED` defaults on outside production; set `DEMOS_ENABLED=true` to publish the catalogue in production (e.g. Render).
+`DEMOS_ENABLED` defaults on outside production; set `DEMOS_ENABLED=true` to publish the catalogue in production (the Cloud Run deploy does this).
 
 ## Architecture (agents)
 

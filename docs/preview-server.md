@@ -22,7 +22,7 @@ Stack details: [tech-stack.md](tech-stack.md). Example journey: [example-service
 | `/components/:name/fixture?fixture=` | Raw official fixture HTML fragment                                                  |
 | `/health`                            | Liveness                                                                            |
 
-`DEMOS_ENABLED` gates the catalogue (on in development/test; set `true` on Render).
+`DEMOS_ENABLED` gates the catalogue (on in development/test; set `true` on Cloud Run).
 
 ## Expectations
 

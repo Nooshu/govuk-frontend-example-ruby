@@ -53,14 +53,14 @@ Rails.application.configure do
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
 
-  # Allow Render.com demo hosts (and local Docker).
+  # Allow Cloud Run demo hosts (and local Docker). Probes may not send that host.
   config.hosts.clear
-  config.hosts << /.*\.onrender\.com/
+  config.hosts << /.*\.run\.app\z/
   config.hosts << "localhost"
   config.hosts << "127.0.0.1"
+  config.host_authorization = {
+    exclude: ->(request) { ["/health", "/up"].include?(request.path) }
+  }
 
   config.secret_key_base = ENV.fetch("SECRET_KEY_BASE")
-  #
-  # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end
